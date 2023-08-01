@@ -10,7 +10,7 @@ Files: Arquivos_externos
        DESCRIPTION
        LICENSE
        NAMESPACE
-Additional_repositories: https://github.com/SwagNoirE/PaineisPublicos/raw/master/Arquivos_externos/
+Additional_repositories: https://github.com/abelbrasil/PAINEL_SIM_DATASUS/raw/master/Arquivos_externos/
 InstData: Arquivos_externos
 License: MIT + file LICENSE
 Encoding: UTF-8
