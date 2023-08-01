@@ -19,36 +19,3 @@ RoxygenNote: 7.0.0
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-
-**Função download_SIM:**
-
-```R
-#' Criar base de dados do Sistema de Informação de Mortalidade (SIM) do Sistema Único de Saúde (SUS)
-#'
-#' Esta função baixa arquivos .dbc do Sistema de Informação de Mortalidade da página de microdados do Sistema Único de Saúde.
-#'
-#' @param uf Uma string indicando a Unidade Federativa (estado) de interesse, utilizando a abreviatura de duas letras (exemplo: "SP").
-#' @param periodo Um vetor com dois ou um valor(es): São string indicando o período do início do intervalo das publicações requeridas no formato "AAAA".
-#' @param dir Uma string indicando o diretório de saída em que os arquivos serão armazenados (o padrão é o diretório criado dentro da pasta Documentos do Usuário).
-#' @param filename Uma string indicando o nome do arquivo para o arquivo baixado (o padrão é construído com base nos parâmetros de entrada do diretório da pasta Documentos do usuário).
-#'
-#' @return Um banco de dados no environment do RStudio
-#'
-#' @examples
-#' \dontrun{
-#' download_SIM (uf = "CE", periodo = c(1996, 2021), dir = ".", filename = NULL),
-#' download_SIM (uf = c("AL", "BA", "CE", "MA", "PB", "PE", "PI", "RN", "SE"), periodo = 2021, dir = ".", filename = NULL),
-#' download_SIM (uf = "CE", periodo = c(1996:2021), dir = ".", filename = NULL)
-#' }
-#'
-#' @export
-download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
-  # Coloque aqui o código da função download_SIM
-}
-```
-
-Observações:
-- A função `download_SIM` é destinada a baixar arquivos .dbc do Sistema de Informação de Mortalidade (SIM) da página de microdados do Sistema Único de Saúde (SUS).
-- A função possui quatro parâmetros: `uf`, que indica a Unidade Federativa (estado) de interesse; `periodo`, que define o período do início do intervalo das publicações requeridas no formato "AAAA"; `dir`, que é o diretório de saída onde os arquivos serão armazenados (por padrão, é criado dentro da pasta Documentos do Usuário); e `filename`, que é o nome do arquivo para o download (por padrão, é construído com base nos parâmetros de entrada no diretório da pasta Documentos do usuário).
-- A função retorna um banco de dados disponível no ambiente do RStudio.
-- O código real da função `download_SIM` deve ser inserido no local indicado no bloco de documentação.
