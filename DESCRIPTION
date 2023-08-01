@@ -1,4 +1,4 @@
-Package: PAINEL_SIM_DATASUS
+Package: PAINELSIMDATASUS
 Title: Criar base de dados do Sistema de Informação de Mortalidade (SIM) do Sistema Único de Saúde (SUS)
 Version: 0.0.0.9000
 Authors@R: 
@@ -13,7 +13,7 @@ Files: Arquivos_externos
        DESCRIPTION
        LICENSE
        NAMESPACE
-Additional_repositories: https://github.com/abelbrasil/PAINEL_SIM_DATASUS/raw/master/Arquivos_externos/
+Additional_repositories: https://github.com/abelbrasil/PAINELSIMDATASUS/raw/master/Arquivos_externos/
 InstData: Arquivos_externos
 License: MIT + file LICENSE
 Encoding: UTF-8
