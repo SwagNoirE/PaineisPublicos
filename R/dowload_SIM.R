@@ -36,7 +36,7 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
   dest_dir <- file.path(Sys.getenv("R_HOME"), "library")
   
   # Caminho completo da pasta "read.dbc"
-  caminho_pasta <- system.file("Arquivos_externos", package = "PAINEL_SIM_DATASUS")
+  caminho_pasta <- system.file("Arquivos_externos", package = "PAINELSIMDATASUS")
   caminho_completo <- file.path(caminho_pasta, "read.dbc")
   
   # Verifica se a pasta existe
@@ -207,7 +207,7 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
   # Importar os arquivos XLSX para juntar ao SIM
   # Identifica o caminho do pacote
   # Adiciona a pasta de arquivos que contém CBO, CID e Municipios
-  caminho_pasta <- system.file("Arquivos_externos", package = "PAINEL_SIM_DATASUS")
+  caminho_pasta <- system.file("Arquivos_externos", package = "PAINELSIMDATASUS")
   
   # Obtém a lista de arquivos na pasta
   arquivos <- list.files(caminho_pasta)
@@ -514,7 +514,7 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
   save.image(file = caminho_arquivo)
   
   # Caminho completo do arquivo "[Modelo]Painel.pbix"
-  caminho_pasta <- system.file("Arquivos_externos", package = "PAINEL_SIM_DATASUS")
+  caminho_pasta <- system.file("Arquivos_externos", package = "PAINELSIMDATASUS")
   caminho_completo <- file.path(caminho_pasta, "[Modelo]Painel.pbix")
   
   # Verifica se o arquivo existe
