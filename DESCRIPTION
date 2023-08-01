@@ -1,6 +1,9 @@
 Package: PAINEL_SIM_DATASUS
 Title: Criar base de dados do Sistema de Informação de Mortalidade (SIM) do Sistema Único de Saúde (SUS)
 Version: 0.0.0.9000
+Authors@R: 
+    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: Este pacote oferece uma função para criar base de dados do Sistema de Informação de Mortalidade (SIM) do Sistema Único de Saúde (SUS). A função permite o download de arquivos .dbc do SIM a partir da página de microdados do SUS, para uma Unidade Federativa (estado) de interesse e um período específico. Os arquivos baixados são armazenados em um diretório de saída escolhido pelo usuário (por padrão, o diretório é criado dentro da pasta Documentos do Usuário). A função também possibilita que o usuário especifique o nome do arquivo para o download. O resultado é um banco de dados disponível no ambiente do RStudio.
 Files: Arquivos_externos
        help
@@ -19,3 +22,4 @@ RoxygenNote: 7.0.0
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+         
