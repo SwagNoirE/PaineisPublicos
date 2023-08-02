@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(PaineisPublicos)
+library(PAINELSIMDATASUS)
 
-test_check("PaineisPublicos")
+test_check("PAINELSIMDATASUS")
