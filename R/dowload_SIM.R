@@ -515,7 +515,7 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
   
   # Caminho completo do arquivo "[Modelo]Painel.pbix"
   caminho_pasta <- system.file("Arquivos_externos", package = "PaineisPublicos")
-  caminho_completo <- file.path(caminho_pasta, "[Modelo]Painel.pbix")
+  caminho_completo <- file.path(caminho_pasta, "Painel_SIM.pbix")
   
   # Verifica se o arquivo existe
   if (file.exists(caminho_completo)) {
