@@ -127,12 +127,10 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
         file_path <- file.path(dir_destino, file_name)
         file_ext <- tools::file_ext(file_path)
         
-        if (file_ext == "dbf") {
-          file_df <- foreign::read.dbf(gzfile(file_path))
-        } else if (file_ext == "dbc" | file_ext == "DBC") {
+        if (file_ext == "dbc" | file_ext == "DBC") {
           file_df <- read.dbc::read.dbc(file_path)
         } else {
-          stop(paste0("O arquivo ", file_name, " não está no formato DBC ou DBF."))
+          stop(paste0("O arquivo ", file_name, " não está no formato DBC."))
         }
         
         # Adiciona as colunas UF e período
@@ -159,12 +157,10 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
             cat(paste0("Lendo o arquivo ", file_name, "\n"))
             file_ext <- tools::file_ext(file_path)
             
-            if (file_ext == "dbf") {
-              file_df <- foreign::read.dbf(gzfile(file_path))
-            } else if (file_ext == "dbc" | file_ext == "DBC") {
+            if (file_ext == "dbc" | file_ext == "DBC") {
               file_df <- read.dbc::read.dbc(file_path)
             } else {
-              stop(paste0("O arquivo ", file_name, " não está no formato DBC ou DBF."))
+              stop(paste0("O arquivo ", file_name, " não está no formato DBC."))
             }
             
             # Adiciona as colunas UF e período
