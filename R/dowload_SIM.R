@@ -49,127 +49,75 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
   cat("O arquivo 'read.dbc' foi movido com sucesso para:", novo_caminho_completo)
 }
   
-  # Transformacao dos parametros ++++++++++++++++++++++++++++++++++++
-  # Convert the input 'uf' into a vector if necessary
-  if (!is.vector(uf)) uf <- as.vector(uf)
-  
-  # Convert the input 'periodo' into a vector if necessary
-  if (!is.vector(periodo)) periodo <- as.vector(periodo)
-  
   # Diretorio e arquivos +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  # Define the destination directory for downloaded files
+  # Define o destino do diretorio para baixar os arquivos
   dir_destino <- file.path(dir, "SIM")
   
-  # Check if the destination directory exists, if not, create it
+  # Checar a existênca do destino do diretorio, se não, crie-o
   if (!dir.exists(dir_destino)) {
     dir.create(dir_destino, recursive = TRUE)
     cat(paste0("O diretório ", dir_destino, " foi criado.\n"))
   }
   
-  # Inform the user about the output directory
+  # Informar o diretório
   cat(paste0("Os arquivos serão salvos em: ", dir_destino, "\n"))
   
-  # Check if the corresponding .DBC files already exist
-  arquivos_existentes <- FALSE
+  # Transformacao dos parametros
+  if (!is.vector(uf)) uf <- as.vector(uf)
+  if (!is.vector(periodo)) periodo <- as.vector(periodo)
+  
+  # URL base para o site do DATASUS
+  base_url <- "ftp://ftp.datasus.gov.br/dissemin/publicos/SIM/CID10/DORES/"
+  
+  # Define as colunas do dataframe SIM
+  SIM <- data.frame(UF = character(),
+                    ANO = integer(),
+                    stringsAsFactors = FALSE)
+  
+  # Loop pelos valores de uf e periodo para baixar os arquivos correspondentes
   for (i in 1:length(uf)) {
     for (j in 1:length(periodo)) {
       file_name <- paste0("DO", uf[i], periodo[j], ".DBC")
       file_path <- file.path(dir_destino, file_name)
-      if (file.exists(file_path)) {
-        arquivos_existentes <- TRUE
-        break
-      }
-    }
-  }
   
-  # Start the process only if the .DBC files do not exist
-  if (!arquivos_existentes) {
-    # Transformacao dos parametros
-    if (!is.vector(uf)) uf <- as.vector(uf)
-    if (!is.vector(periodo)) periodo <- as.vector(periodo)
-    
-    # URL base para o site do DATASUS
-    base_url <- "ftp://ftp.datasus.gov.br/dissemin/publicos/SIM/CID10/DORES/"
-    
-    # Baixa arquivo(os) ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    
-    # Define as colunas do dataframe SIM
-    SIM = data.frame(UF = character(),
-                     ANO = integer(),
-                     stringsAsFactors = FALSE)
-    
-    # Loop pelos valores de uf e periodo para baixar os arquivos correspondentes
-    for (i in 1:length(uf)) {
-      for (j in 1:length(periodo)) {
-        
+      # Verifica se o arquivo já foi baixado
+      if (!file.exists(file_path)) {
         # Verifica se a extensão está como .dbc ou .DBC na URL
-        file_name <- stri_c("DO", uf[i], periodo[j], ".dbc")
         url <- stri_paste(base_url, file_name)
-        if (identical(httr::status_code(httr::GET(url)), 200L)) {
-          file_name <- file_name
-        } else {
-          file_name <- stri_c("DO", uf[i], periodo[j], ".DBC")
-          url <- stri_paste(base_url, file_name)
-          if (identical(httr::status_code(httr::GET(url)), 200L)) {
-            file_name <- file_name
+        if (!identical(httr::status_code(httr::GET(url)), 200L)) {
+          file_name_alt <- paste0("DO", uf[i], periodo[j], ".dbc")
+          url_alt <- stri_paste(base_url, file_name_alt)
+          if (!identical(httr::status_code(httr::GET(url_alt)), 200L)) {
+            cat(paste0("Arquivo ", file_name, " não encontrado. Tentando baixar...\n"))
+            curl_download(url, file.path(dir_destino, file_name))
+          } else {
+            file_name <- file_name_alt
+            url <- url_alt
           }
-        }
-        
-        # Cria conexão com a URL e baixa o arquivo
-        url <- stri_paste(base_url, file_name)
-        file_name_local <- stri_replace_last_fixed(file_name, ".dbc", ".DBC")
-        curl_download(url, file.path(dir_destino, file_name_local))
-        
-        # Lê o arquivo e salva em um dataframe
-        cat(paste0("Lendo o arquivo ", file_name, "\n"))
-        file_path <- file.path(dir_destino, file_name)
-        file_ext <- tools::file_ext(file_path)
-        
-        if (file_ext == "dbc" | file_ext == "DBC") {
-          file_df <- read.dbc::read.dbc(file_path)
         } else {
-          stop(paste0("O arquivo ", file_name, " não está no formato DBC."))
-        }
-        
-        # Adiciona as colunas UF e período
-        file_df$UF <- uf[i]
-        file_df$ANO <- periodo[j]
-        
-        # Adiciona os dados ao dataframe SIM
-        SIM <- rbind(SIM, file_df)
-      }
-    }
-    
-  } else {
-    mensagem_aviso <- "Os arquivos .DBC correspondentes já existem. O download não será iniciado."
-    print(mensagem_aviso)
-    
-    # Ler os arquivos .DBC existentes em dir_destino
-    if (arquivos_existentes) {
-      for (i in 1:length(uf)) {
-        for (j in 1:length(periodo)) {
-          file_name <- paste0("DO", uf[i], periodo[j], ".DBC")
-          file_path <- file.path(dir_destino, file_name)
-          if (file.exists(file_path)) {
-            # Lê o arquivo e salva em um dataframe
-            cat(paste0("Lendo o arquivo ", file_name, "\n"))
-            file_ext <- tools::file_ext(file_path)
-            
-            if (file_ext == "dbc" | file_ext == "DBC") {
-              file_df <- read.dbc::read.dbc(file_path)
-            } else {
-              stop(paste0("O arquivo ", file_name, " não está no formato DBC."))
-            }
-            
-            # Adiciona as colunas UF e período
-            file_df$UF <- uf[i]
-            file_df$ANO <- periodo[j]
-            
-            # Adiciona os dados ao dataframe SIM
-            SIM <- rbind(SIM, file_df)
-          }
+          # Cria conexão com a URL e baixa o arquivo
+          file_name_local <- stri_replace_last_fixed(file_name, ".dbc", ".DBC")
+          curl_download(url, file.path(dir_destino, file_name_local))
         }
       }
+  
+      # Lê o arquivo e salva em um dataframe
+      cat(paste0("Lendo o arquivo ", file_name, "\n"))
+      file_ext <- tools::file_ext(file_path)
+  
+      if (file_ext == "dbc" | file_ext == "DBC") {
+        file_df <- read.dbc::read.dbc(file_path)
+      } else {
+        cat(paste0("O arquivo ", file_name, " não está no formato DBC.\n"))
+        next
+      }
+  
+      # Adiciona as colunas UF e período
+      file_df$UF <- uf[i]
+      file_df$ANO <- periodo[j]
+  
+      # Adiciona os dados ao dataframe SIM
+      SIM <- rbind(SIM, file_df)
     }
   }
   
@@ -521,5 +469,7 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
     file.rename(caminho_completo, novo_caminho_completo)
     cat("Arquivo movido com sucesso para:", novo_caminho_completo)
   } else {cat("O arquivo '[Modelo]Painel.pbix' não foi encontrado no diretório:", caminho_pasta)}
-  
+
+  # Abre o explorador de arquivos no diretório especificado
+  shell.exec(dir_destino)
 }
