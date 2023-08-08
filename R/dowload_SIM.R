@@ -50,28 +50,26 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
 }
   
   # Transformacao dos parametros ++++++++++++++++++++++++++++++++++++
-  
-  # Transforma a entrada de uf em um vetor, se necessário
+  # Convert the input 'uf' into a vector if necessary
   if (!is.vector(uf)) uf <- as.vector(uf)
   
-  # Transforma a entrada de periodo em um vetor, se necessário
+  # Convert the input 'periodo' into a vector if necessary
   if (!is.vector(periodo)) periodo <- as.vector(periodo)
   
   # Diretorio e arquivos +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  
-  # Define o diretório de destino dos arquivos baixados
+  # Define the destination directory for downloaded files
   dir_destino <- file.path(dir, "SIM")
   
-  # Verifica se o diretório de destino existe, caso contrário, cria o diretório
+  # Check if the destination directory exists, if not, create it
   if (!dir.exists(dir_destino)) {
     dir.create(dir_destino, recursive = TRUE)
-    cat(paste0("O direório ", dir_destino, " foi criado.\n"))
+    cat(paste0("O diretório ", dir_destino, " foi criado.\n"))
   }
   
-  # Informa o diretório de sada ao usuário
+  # Inform the user about the output directory
   cat(paste0("Os arquivos serão salvos em: ", dir_destino, "\n"))
   
-  # Verificar se os arquivos .DBC correspondentes já existem
+  # Check if the corresponding .DBC files already exist
   arquivos_existentes <- FALSE
   for (i in 1:length(uf)) {
     for (j in 1:length(periodo)) {
@@ -84,12 +82,12 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
     }
   }
   
-  # Iniciar o processo somente se os arquivos .DBC não existirem
+  # Start the process only if the .DBC files do not exist
   if (!arquivos_existentes) {
     # Transformacao dos parametros
     if (!is.vector(uf)) uf <- as.vector(uf)
     if (!is.vector(periodo)) periodo <- as.vector(periodo)
-  
+    
     # URL base para o site do DATASUS
     base_url <- "ftp://ftp.datasus.gov.br/dissemin/publicos/SIM/CID10/DORES/"
     
@@ -97,8 +95,8 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
     
     # Define as colunas do dataframe SIM
     SIM = data.frame(UF = character(),
-                      ANO = integer(),
-                      stringsAsFactors = FALSE)
+                     ANO = integer(),
+                     stringsAsFactors = FALSE)
     
     # Loop pelos valores de uf e periodo para baixar os arquivos correspondentes
     for (i in 1:length(uf)) {
@@ -127,12 +125,10 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
         file_path <- file.path(dir_destino, file_name)
         file_ext <- tools::file_ext(file_path)
         
-        if (file_ext == "dbf") {
-          file_df <- foreign::read.dbf(gzfile(file_path))
-        } else if (file_ext == "dbc" | file_ext == "DBC") {
+        if (file_ext == "dbc" | file_ext == "DBC") {
           file_df <- read.dbc::read.dbc(file_path)
         } else {
-          stop(paste0("O arquivo ", file_name, " não está no formato DBC ou DBF."))
+          stop(paste0("O arquivo ", file_name, " não está no formato DBC."))
         }
         
         # Adiciona as colunas UF e período
@@ -159,12 +155,10 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
             cat(paste0("Lendo o arquivo ", file_name, "\n"))
             file_ext <- tools::file_ext(file_path)
             
-            if (file_ext == "dbf") {
-              file_df <- foreign::read.dbf(gzfile(file_path))
-            } else if (file_ext == "dbc" | file_ext == "DBC") {
+            if (file_ext == "dbc" | file_ext == "DBC") {
               file_df <- read.dbc::read.dbc(file_path)
             } else {
-              stop(paste0("O arquivo ", file_name, " não está no formato DBC ou DBF."))
+              stop(paste0("O arquivo ", file_name, " não está no formato DBC."))
             }
             
             # Adiciona as colunas UF e período
@@ -172,12 +166,15 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
             file_df$ANO <- periodo[j]
             
             # Adiciona os dados ao dataframe SIM
-            SIM <- rbind(file_df)
+            SIM <- rbind(SIM, file_df)
           }
         }
       }
     }
   }
+  
+  # Transfer the 'SIM' dataframe to the global environment
+  assign("SIM", SIM, envir = .GlobalEnv)
   
   # Tratamento dos dados +++++++++++++++++++++++++++++++++++++++++++++++++++++++
   
