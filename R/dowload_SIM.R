@@ -32,22 +32,22 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
 
   # Move a pasta read.dbc para o library do usuário ++++++++++++++++++++++++++++
   
-  # Diretório de destino
-  dest_dir <- file.path(Sys.getenv("USERPROFILE"), "Documents", "R", "win-library", "4.1")
-  
+  if (file.exists(file.path(system.file(package = "read.dbc")))) {
+  cat("O arquivo 'read.dbc' Já existe no diretório")
+} else {
   # Caminho completo da pasta "read.dbc"
   caminho_pasta <- system.file("Arquivos_externos", package = "PAINELSIMDATASUS")
   caminho_completo <- file.path(caminho_pasta, "read.dbc")
   
-  # Verifica se a pasta existe
-  if (file.exists(caminho_completo)) {
-    # Move o arquivo para o diretório de destino
-    novo_caminho_completo <- file.path(dest_dir, "read.dbc")
-    file.rename(caminho_completo, novo_caminho_completo)
-    cat("O arquivo 'read.dbc' foi movido com sucesso para:", novo_caminho_completo)
-  } else {
-    cat("O arquivo 'read.dbc' não foi encontrado no diretório:", caminho_pasta)
-  }
+  # Diretório de destino
+  dest_dir <- file.path(system.file(package = "read.dbc"))
+  dest_dir <- gsub('read.dbc','', dest_dir)
+  
+  # Move o arquivo para o diretório de destino
+  novo_caminho_completo <- file.path(dest_dir, "read.dbc")
+  file.rename(caminho_completo, novo_caminho_completo)
+  cat("O arquivo 'read.dbc' foi movido com sucesso para:", novo_caminho_completo)
+}
   
   # Transformacao dos parametros ++++++++++++++++++++++++++++++++++++
   
