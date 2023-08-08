@@ -40,8 +40,8 @@ download_SIM <- function(uf, periodo, dir = ".", filename = NULL) {
   caminho_completo <- file.path(caminho_pasta, "read.dbc")
   
   # Diretório de destino
-  dest_dir <- file.path(system.file(package = "read.dbc"))
-  dest_dir <- gsub('read.dbc','', dest_dir)
+  dest_dir <- file.path(system.file(package = "stats"))
+  dest_dir <- gsub('stats','', dest_dir)
   
   # Move o arquivo para o diretório de destino
   novo_caminho_completo <- file.path(dest_dir, "read.dbc")
