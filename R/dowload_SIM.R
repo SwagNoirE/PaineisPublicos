@@ -475,7 +475,4 @@ if file.exists(file.path(dir, "library")) {
     file.rename(caminho_completo, novo_caminho_completo)
     cat("Arquivo movido com sucesso para:", novo_caminho_completo)
   } else {cat("O arquivo '[Modelo]Painel.pbix' não foi encontrado no diretório:", caminho_pasta)}
-
-  # Abre o explorador de arquivos no diretório especificado
-  shell.exec(dir_destino)
 }
